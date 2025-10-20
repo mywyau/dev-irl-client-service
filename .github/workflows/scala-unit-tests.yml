@@ -1,4 +1,4 @@
-name: dev-irl-client-service Unit and Integration Tests
+name: dev-irl-client-payment-service Unit and Integration Tests
 
 on:
   push:
