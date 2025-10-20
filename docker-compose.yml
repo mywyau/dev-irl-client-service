@@ -10,7 +10,7 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: dev_quest
-      DB_USER: dev_quest_user
+      DB_USER: dev_irl_client_db_user
       DB_PASSWORD: turnip
     ports:
       - "8080:8080"

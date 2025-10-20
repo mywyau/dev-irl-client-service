@@ -22,7 +22,7 @@ object LocalAppConfigConstants {
   val kafkaConfig =
     KafkaConfig(
       bootstrapServers = "localhost:9092",
-      clientId = "dev-quest-service",
+      clientId = "dev-irl-client-service",
       acks = "all",
       lingerMs = 5,
       retries = 10,
@@ -47,11 +47,11 @@ object LocalAppConfigConstants {
 
   val containerPostgreSqlConfig =
     PostgresqlConfig(
-      dbName = "dev_client_db",
-      dockerHost = "dev-quest-container",
+      dbName = "dev_irl_client_db",
+      dockerHost = "dev-irl-client-container",
       host = "localhost",
       port = 5432,
-      username = "dev_quest_user",
+      username = "dev_irl_client_db_user",
       password = "turnip",
       maxPoolSize = 42
     )

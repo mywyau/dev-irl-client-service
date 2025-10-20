@@ -47,11 +47,11 @@ object ProdAppConfigConstants {
 
   val containerPostgreSqlConfig =
     PostgresqlConfig(
-      dbName = "dev_client_db",
+      dbName = "dev_irl_client_db",
       dockerHost = "dev-irl-client-container",
       host = "localhost",
       port = 5432,
-      username = "dev_quest_user",
+      username = "dev_irl_client_db_user",
       password = "turnip",
       maxPoolSize = 42
     )
