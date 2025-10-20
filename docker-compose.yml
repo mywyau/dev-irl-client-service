@@ -1,11 +1,11 @@
 version: "3.8"
 
 services:
-  dev-quest-service:
+  dev-irl-client-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: dev-quest-service-app
+    container_name: dev-irl-client-service-app
     environment:
       DB_HOST: postgres
       DB_PORT: 5432

@@ -47,7 +47,7 @@ object LocalAppConfigConstants {
 
   val containerPostgreSqlConfig =
     PostgresqlConfig(
-      dbName = "dev_quest_db",
+      dbName = "dev_client_db",
       dockerHost = "dev-quest-container",
       host = "localhost",
       port = 5432,

@@ -29,7 +29,7 @@ object IntegrationConfigConstants {
   val kafkaConfig =
     KafkaConfig(
       bootstrapServers = "localhost:9092",
-      clientId = "dev-quest-service",
+      clientId = "dev-irl-client-service",
       acks = "all",
       lingerMs = 5,
       retries = 10,
@@ -100,7 +100,7 @@ object IntegrationConfigConstants {
       serverConfig = itSpecServerConfig,
       postgresqlConfig = itPostgresqlConfig,
       redisConfig = itRedisConfig,
-      // awsS3Config = itS3Config,
+      awsS3Config = itS3Config,
       stripeConfig = itStripeConfig
     )
 }

@@ -43,7 +43,7 @@ class UserDataControllerISpec(global: GlobalRead) extends IOSuite with Controlle
     } yield (transactor, client)
 
   test(
-    "GET - /dev-quest-service/user/data/USER001 -  for given user id should find the user data, returning OK and the correct user json body"
+    "GET - /dev-irl-client-service/user/data/USER001 -  for given user id should find the user data, returning OK and the correct user json body"
   ) { (transactorResource, log) =>
 
     val transactor = transactorResource._1.xa
@@ -62,7 +62,7 @@ class UserDataControllerISpec(global: GlobalRead) extends IOSuite with Controlle
       )
 
     val reuser =
-      Request[IO](GET, uri"http://127.0.0.1:9999/dev-quest-service/user/data/USER001")
+      Request[IO](GET, uri"http://127.0.0.1:9999/dev-irl-client-service/user/data/USER001")
         .addCookie("auth_session", sessionToken)
 
     val expectedUserData = testUserData("USER001")
@@ -79,7 +79,7 @@ class UserDataControllerISpec(global: GlobalRead) extends IOSuite with Controlle
 
   // TODO: Change to PUT endpoint, update frontend
   test(
-    "POST - /dev-quest-service/user/data/create/USER006 - should generate the user data in db table, returning Created response"
+    "POST - /dev-irl-client-service/user/data/create/USER006 - should generate the user data in db table, returning Created response"
   ) { (transactorResource, log) =>
 
     val transactor = transactorResource._1.xa
@@ -98,7 +98,7 @@ class UserDataControllerISpec(global: GlobalRead) extends IOSuite with Controlle
     val requestBody: Json = testCreateUserData("USER006").asJson
 
     val reuser =
-      Request[IO](POST, uri"http://127.0.0.1:9999/dev-quest-service/user/data/create/USER006")
+      Request[IO](POST, uri"http://127.0.0.1:9999/dev-irl-client-service/user/data/create/USER006")
         .addCookie("auth_session", sessionToken)
         .withEntity(requestBody)
 
@@ -115,7 +115,7 @@ class UserDataControllerISpec(global: GlobalRead) extends IOSuite with Controlle
   }
 
   test(
-    "PUT - /dev-quest-service/user/data/update/USER008 - " +
+    "PUT - /dev-irl-client-service/user/data/update/USER008 - " +
       "given a valid user_id should update the user type for given user - returning Updated response"
   ) { (transactorResource, log) =>
 
@@ -133,7 +133,7 @@ class UserDataControllerISpec(global: GlobalRead) extends IOSuite with Controlle
       )
 
     val reuser =
-      Request[IO](PUT, uri"http://127.0.0.1:9999/dev-quest-service/user/data/update/USER008")
+      Request[IO](PUT, uri"http://127.0.0.1:9999/dev-irl-client-service/user/data/update/USER008")
         .addCookie("auth_session", sessionToken)
         .withEntity(updateUserDataRequest.asJson)
 
@@ -150,7 +150,7 @@ class UserDataControllerISpec(global: GlobalRead) extends IOSuite with Controlle
   }
 
   test(
-    "DELETE - /dev-quest-service/user/data/delete/USER004 - " +
+    "DELETE - /dev-irl-client-service/user/data/delete/USER004 - " +
       "should delete the user data for a given user_id, returning OK and Deleted response json"
   ) { (transactorResource, log) =>
 
@@ -160,7 +160,7 @@ class UserDataControllerISpec(global: GlobalRead) extends IOSuite with Controlle
     val sessionToken = "test-session-token"
 
     val reuser =
-      Request[IO](DELETE, uri"http://127.0.0.1:9999/dev-quest-service/user/data/delete/USER004")
+      Request[IO](DELETE, uri"http://127.0.0.1:9999/dev-irl-client-service/user/data/delete/USER004")
         .addCookie("auth_session", sessionToken)
 
     val expectedBody = DeletedResponse(DeleteSuccess.toString, "User deleted successfully")
