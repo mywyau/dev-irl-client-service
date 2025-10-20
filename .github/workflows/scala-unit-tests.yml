@@ -56,9 +56,9 @@ jobs:
 
       DB_HOST: postgres
       DB_PORT: "5432"
-      DB_USER: dev_quest_test_user
+      DB_USER: dev_irl_client_db_user
       DB_PASSWORD: turnip
-      DB_NAME: dev_quest_test_db
+      DB_NAME: dev_irl_client_test_db
 
       # LocalStack environment variables
       AWS_ACCESS_KEY_ID: test
@@ -71,11 +71,11 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          POSTGRES_USER: dev_quest_test_user
+          POSTGRES_USER: dev_irl_client_db_user
           POSTGRES_PASSWORD: turnip
-          POSTGRES_DB: dev_quest_test_db
+          POSTGRES_DB: dev_irl_client_test_db
         options: >-
-          --health-cmd "pg_isready -U dev_quest_test_user -d dev_quest_test_db"
+          --health-cmd "pg_isready -U dev_irl_client_db_user -d dev_irl_client_test_db"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -157,7 +157,7 @@ jobs:
           PGPASSWORD: turnip
         run: |
           for i in {1..30}; do
-            if pg_isready -h postgres -p 5432 -U dev_quest_test_user; then
+            if pg_isready -h postgres -p 5432 -U dev_irl_client_db_user; then
               echo "Postgres is ready";
               break;
             fi
@@ -169,8 +169,8 @@ jobs:
         env:
           PGPASSWORD: turnip
         run: |
-          psql -h postgres -p 5432 -U dev_quest_test_user -d postgres -c "DROP DATABASE IF EXISTS dev_quest_test_db;"
-          psql -h postgres -p 5432 -U dev_quest_test_user -d postgres -c "CREATE DATABASE dev_quest_test_db;"
+          psql -h postgres -p 5432 -U dev_irl_client_db_user -d postgres -c "DROP DATABASE IF EXISTS dev_irl_client_test_db;"
+          psql -h postgres -p 5432 -U dev_irl_client_db_user -d postgres -c "CREATE DATABASE dev_irl_client_test_db;"
 
       - name: Install AWS CLI v2 (no sudo)
         run: |
