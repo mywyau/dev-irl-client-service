@@ -10,9 +10,7 @@ import java.time.LocalDateTime
 import models.database.*
 import models.database.DeleteSuccess
 import models.database.UpdateSuccess
-import models.users.CreateUserData
-import models.users.Registration
-import models.users.UserData
+import models.users.*
 import models.Client
 import models.Completed
 import models.Dev
@@ -63,44 +61,46 @@ class UserDataRepositoryISpec(global: GlobalRead) extends IOSuite with Repositor
     } yield expect(users == Option(expectedResult))
   }
 
-  test(".registerUser() - should find and update the user's type if user_id exists for a previously created user returning UpdateSuccess response") { userRepo =>
+  test(".updateUserData() - given for a already created user, should update the user details correctly - USER004") { userRepo =>
 
-    val orignalUser =
-      UserData(
-        userId = "USER002",
-        email = "dylan_smith@gmail.com",
-        username = "",
-        firstName = None,
-        lastName = None,
-        userType = Some(Dev)
-      )
+    val userId4 = "USER004"
 
-    val expectedResult =
+    val foundUserProfileData =
       UserData(
-        userId = "USER002",
-        email = "dylan_smith@gmail.com",
-        username = "tifa2",
-        firstName = Some("Dylan"),
+        userId = userId4,
+        email = "joe_smith@gmail.com",
+        username = "wakka",
+        firstName = Some("Joe"),
         lastName = Some("Smith"),
         userType = Some(Dev)
       )
 
-    for {
-      originalData <- userRepo.findUser("USER002")
-      result <- userRepo.registerUser(
-        "USER002",
-        Registration(
-          username = "tifa2",
-          firstName = "Dylan",
-          lastName = "Smith",
-          userType = Dev
-        )
+    val updateUserProfileData =
+      UpdateUserData(
+        email = "NotJoe_smith@gmail.com",
+        firstName = Some("Joe"),
+        lastName = Some("Smith"),
+        userType = Some(Dev)
       )
-      updatedUser <- userRepo.findUser("USER002")
+
+    val updatedUserProfile =
+      UserData(
+        userId = userId4,
+        email = "NotJoe_smith@gmail.com",
+        username = "wakka",
+        firstName = Some("Joe"),
+        lastName = Some("Smith"),
+        userType = Some(Dev)
+      )  
+
+    for {
+      foundUser4 <- userRepo.findUser(userId4)
+      updatedResult <- userRepo.updateUserData(userId4, updateUserProfileData)
+      updatedUser4 <- userRepo.findUser(userId4)
     } yield expect.all(
-      originalData == Some(orignalUser),
-      result == Valid(UpdateSuccess),
-      updatedUser == Some(expectedResult)
+      foundUser4 == Option(foundUserProfileData),
+      updatedResult == Valid(UpdateSuccess),
+      updatedUser4 == Option(updatedUserProfile)
     )
   }
 

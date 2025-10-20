@@ -24,8 +24,6 @@ trait UserDataServiceAlgebra[F[_]] {
 
   def getUser(userId: String): F[Option[UserData]]
 
-  def createUser(userId: String, createUserData: CreateUserData): F[ValidatedNel[DatabaseErrors, DatabaseSuccess]]
-
   def updateUserData(userId: String, updateUserData: UpdateUserData): F[ValidatedNel[DatabaseErrors, DatabaseSuccess]]
 
   def deleteUser(userId: String): F[ValidatedNel[DatabaseErrors, DatabaseSuccess]]
@@ -42,17 +40,6 @@ class UserDataServiceImpl[F[_] : Concurrent : Monad : Logger](
       case None =>
         Logger[F].debug(s"[UserDataService] No user found with ID: $userId") *> Concurrent[F].pure(None)
     }
-
-  override def createUser(userId: String, createUserData: CreateUserData): F[ValidatedNel[DatabaseErrors, DatabaseSuccess]] =
-    Logger[F].debug(s"[UserDataService] Creating a new user for userId: $userId") *>
-      userRepo.createUser(userId, createUserData).flatMap {
-        case Valid(value) =>
-          Logger[F].debug(s"[UserDataService] User successfully created with ID: $userId") *>
-            Concurrent[F].pure(Valid(value))
-        case Invalid(errors) =>
-          Logger[F].error(s"[UserDataService] Failed to create user. Errors: ${errors.toList.mkString(", ")}") *>
-            Concurrent[F].pure(Invalid(errors))
-      }
 
   override def updateUserData(userId: String, updateUserData: UpdateUserData): F[ValidatedNel[DatabaseErrors, DatabaseSuccess]] =
     userRepo.updateUserData(userId, updateUserData).flatMap {

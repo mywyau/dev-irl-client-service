@@ -7,7 +7,7 @@ import cats.implicits.*
 import configuration.AppConfig
 import configuration.BaseAppConfig
 import controllers.mocks.*
-import controllers.UserDataController
+import controllers.*
 import dev.profunktor.redis4cats.RedisCommands
 import doobie.util.transactor.Transactor
 import infrastructure.cache.*
@@ -59,13 +59,13 @@ object ProfileRoutes extends BaseAppConfig {
       )
     )
 
-  def userDataRoutes(appConfig: AppConfig, transactor: Transactor[IO]): Resource[IO, HttpRoutes[IO]] =
+  def profileRoutes(appConfig: AppConfig, transactor: Transactor[IO]): Resource[IO, HttpRoutes[IO]] =
     for {
       ref <- Resource.eval(mockCachedAuthSessions)
       mockSessionCache = new MockSessionCache(ref)
       userDataRepository = UserDataRepository(transactor)
       userDataService = UserDataService(userDataRepository)
-      userDataController = UserDataController(userDataService, mockSessionCache)
-    } yield userDataController.routes
+      clientProfileController = ClientProfileController(userDataService, mockSessionCache)
+    } yield clientProfileController.routes
 
 }

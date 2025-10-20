@@ -17,18 +17,21 @@ import repositories.*
 import services.*
 import services.stripe.StripeBillingServiceImpl
 
-object RegistrationRoutes {
+object ProfileRoutes {
 
   def profileRoutes[F[_] : Concurrent : Temporal : NonEmptyParallel : Async : Logger](
-    transactor: HikariTransactor[F],
     appConfig: AppConfig,
-    client: Client[F]
+    transactor: HikariTransactor[F],
   ): HttpRoutes[F] = {
-    
-    val profileService = ClientProfileService()
 
-    val profileController = ClientProfileController(profileService)
+    val userDataRepository = new UserDataRepositoryImpl(transactor)
+    val userDataService = new UserDataServiceImpl(userDataRepository)
 
-    profileController.routes
+    val sessionCache = new SessionCacheImpl(appConfig)
+    val sessionService = SessionService(userDataRepository, sessionCache)
+
+    val clientProfileController = ClientProfileController(userDataService, sessionCache)
+
+    clientProfileController.routes
   }
 }
