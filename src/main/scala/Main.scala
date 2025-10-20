@@ -17,7 +17,6 @@ import java.time.temporal.ChronoUnit
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
-import jobs.EstimateServiceBuilder
 import middleware.Middleware.throttleMiddleware
 import modules.*
 import org.http4s.client.Client
@@ -35,19 +34,15 @@ import org.typelevel.ci.CIString
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 import org.typelevel.log4cats.Logger
 import repositories.*
-import routes.AuthRoutes.*
-import routes.HiscoreRoutes.*
-import routes.PricingPlanRoutes.pricingPlanRoutes
-import routes.PricingPlanRoutes.stripeBillingWebhookRoutes
-import routes.RegistrationRoutes.*
+
+// import routes.PricingPlanRoutes.pricingPlanRoutes
+// import routes.PricingPlanRoutes.stripeBillingWebhookRoutes
 import routes.Routes.*
-import routes.UploadRoutes.*
 import scala.concurrent.duration.*
 import scala.concurrent.duration.DurationInt
 import services.*
-import services.kafka.consumers.QuestCreatedConsumer
-import services.kafka.producers.*
-
+// import services.kafka.consumers.QuestCreatedConsumer
+// import services.kafka.producers.*
 
 object Main extends IOApp {
 
@@ -62,7 +57,7 @@ object Main extends IOApp {
       kafkaProducers <- KafkaModule.make[IO](config)
       httpClient <- HttpClientModule.make[IO]
       httpApp <- HttpModule.make(config, transactor, redis, httpClient, kafkaProducers)
-      _ <- BackgroundJobsModule.runAll(transactor, config, kafkaProducers.questEstimationProducer)
+      // _ <- BackgroundJobsModule.runAll(transactor, config, kafkaProducers.questEstimationProducer)
       host <- Resource.eval(IO.fromOption(Host.fromString(config.serverConfig.host))(new RuntimeException("Invalid host in configuration")))
       port <- Resource.eval(IO.fromOption(Port.fromInt(config.serverConfig.port))(new RuntimeException("Invalid port in configuration")))
       server <- EmberServerBuilder
@@ -77,7 +72,6 @@ object Main extends IOApp {
     serverResource.use(_ => IO.never).as(ExitCode.Success)
   }
 }
-
 
 // Old below
 

@@ -57,23 +57,7 @@ object HttpModule {
   ): HttpRoutes[F] =
     Router(
       "/dev-quest-service" -> (
-        Routes.baseRoutes() <+>
-        AuthRoutes.authRoutes(redisHost, redisPort, transactor, appConfig) <+>
-        Routes.devBidRoutes(redisHost, redisPort, transactor, appConfig) <+>
-        Routes.questsRoutes(redisHost, redisPort, transactor, appConfig, kafkaProducers.questEventProducer) <+>
-        Routes.estimateRoutes(redisHost, redisPort, transactor, appConfig, kafkaProducers.questEstimationProducer) <+>
-        Routes.estimationExpirationRoutes(redisHost, redisPort, transactor, appConfig) <+>
-        HiscoreRoutes.hiscoreRoutes(transactor, appConfig) <+>
-        HiscoreRoutes.languageRoutes(transactor, appConfig) <+>
-        RegistrationRoutes.profileRoutes(transactor, appConfig, httpClient) <+>
-        Routes.paymentRoutes(redisHost, redisPort, transactor, appConfig, httpClient) <+>
-        PricingPlanRoutes.pricingPlanRoutes(appConfig, redisHost, redisPort, transactor) <+>
-        PricingPlanRoutes.stripeBillingWebhookRoutes(appConfig, redisHost, redisPort, transactor) <+>
-        RegistrationRoutes.registrationRoutes(redisHost, redisPort, transactor, appConfig) <+>
-        Routes.rewardRoutes(redisHost, redisPort, transactor, appConfig) <+>
-        HiscoreRoutes.skillRoutes(transactor, appConfig) <+>
-        UploadRoutes.uploadRoutes(transactor, appConfig) <+>
-        RegistrationRoutes.userDataRoutes(redisHost, redisPort, transactor, appConfig)
+        Routes.baseRoutes() 
       )
     )
 

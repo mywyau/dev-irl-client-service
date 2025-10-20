@@ -14,41 +14,11 @@ object IntegrationConfigConstants {
       useProdStripe = false
     )
 
-  val devSubmissionConfig =
-    DevSubmissionConfig(
-      expiryDays = 730
-    )
-
-  val questConfig =
-    QuestConfig(
-      maxActiveQuests = 5,
-      bronzeXp = 1000.00,
-      ironXp = 2000.00,
-      steelXp = 3000.00,
-      mithrilXp = 4000.00,
-      adamantiteXp = 5000.00,
-      runicXp = 6000.00,
-      demonicXp = 7000.00,
-      ruinXp = 8000.00,
-      aetherXp = 10000.00
-    )
-
   val itDevIrlFrontendConfig =
     DevIrlFrontendConfig(
       host = "0.0.0.0",
       port = 3000,
       baseUrl = "http://localhost:3000"
-    )
-
-  val estimateConfig =
-    EstimationConfig(
-      localBucketSeconds = 10,
-      localMinimumEstimationWindowSeconds = 30,
-      prodBucketSeconds = 21600,
-      prodMinimumEstimationWindowSeconds = 72000,
-      intervalSeconds = 30,
-      estimationThreshold = 3,
-      maxDailyEstimates = 5
     )
 
   val pricingPlanConfig =
@@ -125,15 +95,12 @@ object IntegrationConfigConstants {
     AppConfig(
       featureSwitches = featureSwitches,
       pricingPlanConfig = pricingPlanConfig,
-      devSubmission = devSubmissionConfig,
       kafka = kafkaConfig,
-      questConfig = questConfig,
-      estimationConfig = estimateConfig,
       devIrlFrontendConfig = itDevIrlFrontendConfig,
       serverConfig = itSpecServerConfig,
       postgresqlConfig = itPostgresqlConfig,
       redisConfig = itRedisConfig,
-      awsS3Config = itS3Config,
+      // awsS3Config = itS3Config,
       stripeConfig = itStripeConfig
     )
 }

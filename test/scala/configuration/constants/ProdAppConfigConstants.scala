@@ -14,11 +14,6 @@ object ProdAppConfigConstants {
       useProdStripe = false
     )
 
-  val devSubmissionConfig =
-    DevSubmissionConfig(
-      expiryDays = 730
-    )
-
   val questConfig =
     QuestConfig(
       maxActiveQuests = 5,
@@ -125,11 +120,8 @@ object ProdAppConfigConstants {
   val prodAppConfigConstant =
     AppConfig(
       featureSwitches = featureSwitches,
-      pricingPlanConfig = pricingPlanConfig,
-      devSubmission = devSubmissionConfig,
+      pricingPlanConfig = pricingPlanConfig
       kafka = kafkaConfig,
-      questConfig = questConfig,
-      estimationConfig = estimateConfig,
       devIrlFrontendConfig = devIrlFrontendConfig,
       serverConfig = appServerConfig,
       postgresqlConfig = containerPostgreSqlConfig,

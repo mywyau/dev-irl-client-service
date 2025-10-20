@@ -19,62 +19,16 @@ import services.stripe.StripeBillingServiceImpl
 
 object RegistrationRoutes {
 
-  def registrationRoutes[F[_] : Async : Logger](
-    redisHost: String,
-    redisPort: Int,
-    transactor: HikariTransactor[F],
-    appConfig: AppConfig
-  ): HttpRoutes[F] = {
-
-    val userDataRepository = new UserDataRepositoryImpl(transactor)
-    val sessionCache = new SessionCacheImpl(redisHost, redisPort, appConfig)
-
-    val pricingPlanCache = new PricingPlanCacheImpl(redisHost, redisPort, appConfig)
-    val pricingPlanRepository = PricingPlanRepository(transactor)
-    val userPricingPlanRepository = UserPricingPlanRepository(transactor)
-    val stripeBillingService = new StripeBillingServiceImpl(appConfig)
-    
-    val userPricingPlanService = UserPricingPlanService(appConfig, pricingPlanCache, pricingPlanRepository, userPricingPlanRepository, stripeBillingService)
-    val registrationService = new RegistrationServiceImpl(userDataRepository, userPricingPlanService)
-    val registrationController = RegistrationController(registrationService, sessionCache)
-
-    registrationController.routes
-  }
-
   def profileRoutes[F[_] : Concurrent : Temporal : NonEmptyParallel : Async : Logger](
     transactor: HikariTransactor[F],
     appConfig: AppConfig,
     client: Client[F]
   ): HttpRoutes[F] = {
+    
+    val profileService = ClientProfileService()
 
-    val levelService = LevelService
-    val stripeAccountRepository = StripeAccountRepository(transactor)
-    val skillRepository = DevSkillRepository(transactor)
-    val languageRepository = DevLanguageRepository(transactor)
-
-    val stripePaymentService = StripeRegistrationService(stripeAccountRepository, appConfig, client)
-    val profileService = ProfileService(skillRepository, languageRepository)
-
-    val profileController = ProfileController(profileService, stripePaymentService)
+    val profileController = ClientProfileController(profileService)
 
     profileController.routes
-  }
-
-  def userDataRoutes[F[_] : Async : Logger](
-    redisHost: String,
-    redisPort: Int,
-    transactor: HikariTransactor[F],
-    appConfig: AppConfig
-  ): HttpRoutes[F] = {
-
-    val userDataRepository = new UserDataRepositoryImpl(transactor)
-    val userDataService = new UserDataServiceImpl(userDataRepository)
-
-    val sessionCache = new SessionCacheImpl(redisHost, redisPort, appConfig)
-    val sessionService = SessionService(userDataRepository, sessionCache)
-
-    val userDataController = UserDataController(userDataService, sessionCache)
-
-    userDataController.routes
   }
 }
