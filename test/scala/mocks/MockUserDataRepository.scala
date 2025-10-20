@@ -21,13 +21,7 @@ case object MockUserDataRepository extends UserDataRepositoryAlgebra[IO] {
 
   override def findUser(userId: String): IO[Option[UserData]] = ???
 
-  override def findUserNoUserName(userId: String): IO[Option[RegistrationUserDataPartial]] = ???
-
-  override def createUser(userId: String, createUserData: CreateUserData): IO[ValidatedNel[DatabaseErrors, DatabaseSuccess]] = ???
-
   override def updateUserData(userId: String, updateUserData: UpdateUserData): IO[ValidatedNel[DatabaseErrors, DatabaseSuccess]] = ???
-
-  override def registerUser(userId: String, userType: Registration): IO[ValidatedNel[DatabaseErrors, DatabaseSuccess]] = ???
 
   override def deleteUser(userId: String): IO[ValidatedNel[DatabaseErrors, DatabaseSuccess]] = ???
 
