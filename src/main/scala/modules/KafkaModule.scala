@@ -3,15 +3,12 @@ package modules
 
 import cats.effect._
 import fs2.kafka._
-import services.kafka.producers._
+// import services.kafka.producers._
 import infrastructure.KafkaProducerProvider
 import configuration.AppConfig
 import org.typelevel.log4cats.Logger
 
-final case class KafkaProducers[F[_]](
-  questEstimationProducer: QuestEstimationEventProducerAlgebra[F],
-  questEventProducer: QuestEventProducerAlgebra[F]
-)
+final case class KafkaProducers[F[_]]()
 
 object KafkaModule {
 
@@ -25,18 +22,6 @@ object KafkaModule {
         lingerMs = appConfig.kafka.lingerMs,
         retries = appConfig.kafka.retries
       )
-
-      // ✅ Use it in your producers
-      questEstimationProducer = new QuestEstimationEventProducerImpl[F](
-        appConfig.kafka.topic.estimationFinalized,
-        producer
-      )
-
-      questEventProducer = new QuestEventProducerImpl[F](
-        appConfig.kafka.topic.questCreated,
-        producer
-      )
-
-    } yield KafkaProducers(questEstimationProducer, questEventProducer)
+    } yield KafkaProducers()
   }
 }

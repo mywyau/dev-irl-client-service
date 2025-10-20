@@ -1,16 +1,16 @@
 version: "3.8"
 
 services:
-  dev-quest-service:
+  dev-irl-client-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: dev-quest-service-app
+    container_name: dev-irl-client-service-app
     environment:
       DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: dev_quest
-      DB_USER: dev_quest_user
+      DB_USER: dev_irl_client_db_user
       DB_PASSWORD: turnip
     ports:
       - "8080:8080"
