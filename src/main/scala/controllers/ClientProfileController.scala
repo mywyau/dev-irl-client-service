@@ -32,35 +32,38 @@ trait ClientProfileControllerAlgebra[F[_]] {
 }
 
 class ClientProfileControllerImpl[F[_] : Async : Concurrent : Logger](
-  clientProfileService: ClientProfileServiceAlgebra[F]
+  clientProfileService: ClientProfileServiceAlgebra[F],
+  userService: UserDataServiceAlgebra[F],
+  sessionCache: SessionCacheAlgebra[F]
 ) extends Http4sDsl[F]
     with ClientProfileControllerAlgebra[F] {
 
-  // implicit val stripeDevUserDataDecoder: EntityDecoder[F, StripeDevUserData] = jsonOf[F, StripeDevUserData]
+  private def extractCookieSessionToken(req: Request[F]): Option[String] =
+    req.cookies
+      .find(_.name == "auth_session")
+      .map(_.content)
 
-  val routes: HttpRoutes[F] = HttpRoutes.of[F] { case req @ GET -> Root / "profile" / "health" =>
-    Logger[F].debug(s"[ClientProfileControllerImpl] GET - Health check for backend ClientProfileControllerImpl") *>
-      Ok(GetResponse("/dev-quest-service/skill/health", "I am alive - ClientProfileControllerImpl").asJson)
+  private def withValidSession(userId: String, token: String)(onValid: F[Response[F]]): F[Response[F]] =
+    Logger[F].debug(s"[ClientProfileControllerImpl][withValidSession] UserId: $userId, token: $token") *>
+      sessionCache.getSession(userId).flatMap {
+        case Some(userSession) if userSession.cookieValue == token =>
+          Logger[F].debug(s"[ClientProfileControllerImpl][withValidSession] User session: $userSession") *>
+            onValid
+        case Some(session) =>
+          Logger[F].debug(s"[ClientProfileControllerImpl][withValidSession] User session does not match request user session token value from redis. $session") *>
+            Forbidden("User session does not match request user session token value from redis.")
+        case None =>
+          Logger[F].debug("[ClientProfileControllerImpl][withValidSession] Invalid or expired session")
+          Forbidden("Invalid or expired session")
+      }
 
-  // case req @ POST -> Root / "stripe" / "onboarding" =>
-  //   for {
-  //     _ <- Logger[F].debug(s"[ProfileController] POST - Trying to get stripe link for user")
-  //     userData <- req.as[StripeDevUserData] // or decode from session/cookie.   // this is a simple json body to return the devId
-  //     _ <- Logger[F].debug(s"[ProfileController] POST - UserData Recieved: $userData")
-  //     link <- stripeRegistrationService.createAccountLink(userData.userId)
-  //     resp <- {
-  //       Logger[F].debug(s"[ProfileController] POST - Stripe account creation Link created generated: ${link.asJson}") *>
-  //         Ok(link.asJson)
-  //     }
-  //   } yield resp
-
-  // case req @ POST -> Root / "stripe" / "onboarding" / "complete" =>
-  //   for {
-  //     userData <- req.as[StripeDevUserData] // or decode from session/cookie.   // this is a simple json body to return the devId
-  //     _ <- stripeRegistrationService.fetchAndUpdateAccountDetails(userData.userId)
-  //     resp <- Ok(Json.obj("status" -> Json.fromString("Stripe account status updated")))
-  //   } yield resp
+  val routes: HttpRoutes[F] = HttpRoutes.of[F] { 
+    case req @ GET -> Root / "profile" / "health" =>
+      Logger[F].debug(s"[ClientProfileControllerImpl] GET - Health check for backend ClientProfileControllerImpl") *>
+        Ok(GetResponse("/dev-irl-client-service/skill/health", "I am alive - ClientProfileControllerImpl").asJson)  
   }
+
+
 }
 
 object ClientProfileController {

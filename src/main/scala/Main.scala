@@ -185,7 +185,7 @@ object Main extends IOApp {
 //       uploadRoutes <- Resource.pure(uploadRoutes(transactor, appConfig))
 
 //       combinedRoutes: HttpRoutes[F] = Router(
-//         "/dev-quest-service" -> (
+//         "/dev-irl-client-service" -> (
 //           baseRoutes <+>
 //             authRoutes <+>
 //             devBidRoutes <+>

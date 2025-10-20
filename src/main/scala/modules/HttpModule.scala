@@ -56,7 +56,7 @@ object HttpModule {
     kafkaProducers: KafkaProducers[F]
   ): HttpRoutes[F] =
     Router(
-      "/dev-quest-service" -> (
+      "/dev-irl-client-service" -> (
         Routes.baseRoutes() 
       )
     )
