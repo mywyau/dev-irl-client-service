@@ -33,7 +33,6 @@ trait ClientProfileControllerAlgebra[F[_]] {
 
 class ClientProfileControllerImpl[F[_] : Async : Concurrent : Logger](
   clientProfileService: ClientProfileServiceAlgebra[F],
-  userService: UserDataServiceAlgebra[F],
   sessionCache: SessionCacheAlgebra[F]
 ) extends Http4sDsl[F]
     with ClientProfileControllerAlgebra[F] {
